@@ -1,0 +1,393 @@
+<style>
+.rq{display:flex;flex-direction:column;gap:var(--cds-gap-lg);font-family:var(--font-anthropic-sans);max-width:84rem;margin-inline:auto}
+.rq-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:var(--cds-gap-md)}
+.rq-head-text{display:flex;flex-direction:column;gap:var(--cds-gap-xs);min-width:0;flex:1 1 28rem}
+.rq h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0;text-wrap:balance}
+.rq-take{margin:0;color:var(--color-fg-muted);font-size:var(--cds-font-size-body);max-width:62ch}
+.rq-take b{color:var(--color-fg);font-weight:600}
+.rq-seg{display:inline-flex;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:2px;gap:2px;background:var(--color-panel)}
+.rq-seg button{font:inherit;font-size:var(--cds-font-size-caption);border:0;background:transparent;color:var(--color-fg-muted);padding:var(--cds-pad-xs) var(--cds-pad-md);border-radius:calc(var(--cds-radius) - 2px);cursor:pointer}
+.rq-seg button[aria-pressed="true"]{background:var(--color-bg);color:var(--color-fg);box-shadow:0 0 0 1px var(--color-border-line)}
+.rq-seg button:focus-visible,.rq th button:focus-visible,.rq tbody tr:focus-visible{outline:2px solid var(--color-fg);outline-offset:1px}
+.rq-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:var(--cds-gap-md)}
+.rq-kpi{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-md) var(--cds-pad-lg);display:flex;flex-direction:column;gap:var(--cds-gap-xs)}
+.rq-kpi span{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rq-kpi strong{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);font-variant-numeric:tabular-nums;line-height:1.1}
+.rq-kpi small{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rq-card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);display:flex;flex-direction:column;gap:var(--cds-gap-sm);min-width:0}
+.rq-card h2,.rq-card h3{margin:0;font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium)}
+.rq-card h3{font-size:var(--cds-font-size-body)}
+.rq-note{margin:0;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rq-sec{display:flex;flex-direction:column;gap:var(--cds-gap-md)}
+.rq-sec>h2{margin:0;font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium)}
+.rq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));gap:var(--cds-gap-md)}
+.rq-legend{display:flex;flex-wrap:wrap;gap:var(--cds-gap-md);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.rq-legend i{display:inline-block;width:.7rem;height:.7rem;border-radius:2px;margin-right:.35rem;vertical-align:-1px}
+.rq-chart{position:relative;min-height:12rem}
+.rq-chart svg text{font-size:var(--cds-font-size-caption);fill:var(--color-fg-muted)}
+.rq-chart svg text.lab{fill:var(--color-fg)}
+.rq-tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:2}
+.rq-tip .t{color:var(--cds-text-secondary)}
+.rq-tip i{display:inline-block;width:.55rem;height:.55rem;border-radius:2px;margin-right:.3rem}
+.rq-bars{display:flex;flex-direction:column;gap:6px;min-height:6rem}
+.rq-bar{display:grid;grid-template-columns:minmax(0,8.5rem) 1fr 3.2rem;gap:var(--cds-gap-sm);align-items:center;font-size:var(--cds-font-size-caption)}
+.rq-bar .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rq-bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--color-fg-muted)}
+.rq-track{display:flex;gap:2px;height:10px}
+.rq-track>div{height:100%;border-radius:4px;min-width:0}
+.rq-tools{display:flex;flex-wrap:wrap;gap:var(--cds-gap-sm);align-items:center;justify-content:space-between}
+.rq-tools input{font:inherit;font-size:var(--cds-font-size-body);padding:var(--cds-pad-xs) var(--cds-pad-sm);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);background:var(--color-bg);color:var(--color-fg);min-width:0;flex:1 1 16rem;max-width:28rem}
+.rq-tablebox{max-height:32rem;overflow:auto;border:1px solid var(--color-border-line);border-radius:var(--cds-radius)}
+.rq table{width:100%;border-collapse:collapse;font-size:var(--cds-font-size-caption)}
+.rq th{position:sticky;top:0;background:var(--color-panel);text-align:left;border-bottom:1px solid var(--color-border-line);padding:0;z-index:1}
+.rq th button{font:inherit;font-weight:var(--cds-font-weight-medium);color:var(--color-fg);background:none;border:0;padding:var(--cds-pad-xs) var(--cds-pad-sm);cursor:pointer;width:100%;text-align:left;white-space:nowrap}
+.rq td{padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.rq tbody tr{cursor:pointer}
+.rq tbody tr:hover{background:var(--color-bg)}
+.rq tbody tr[aria-selected="true"]{background:var(--color-bg);box-shadow:inset 3px 0 0 var(--color-fg)}
+.rq td.kw{color:var(--color-fg-muted);min-width:14rem}
+.rq td.pos{min-width:12rem}
+.rq td.yr{white-space:nowrap;font-variant-numeric:tabular-nums}
+.rq-chip{display:inline-block;padding:0 .4rem;border-radius:999px;border:1px solid var(--color-border-line);font-size:var(--cds-font-size-caption);white-space:nowrap}
+.rq-detail{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:var(--cds-gap-md)}
+.rq-detail pre{white-space:pre-wrap;font:inherit;font-size:var(--cds-font-size-caption);margin:0;line-height:1.6;max-height:22rem;overflow:auto}
+.rq-detail-head{display:flex;flex-wrap:wrap;gap:var(--cds-gap-sm);align-items:baseline;justify-content:space-between}
+.rq-detail-head a{font-size:var(--cds-font-size-caption);color:var(--color-fg)}
+.rq-fail{display:flex;align-items:center;justify-content:center;gap:.4rem;min-height:inherit;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.rq-fail::before{content:"";width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)}
+[data-dash-source-state=empty]{color:transparent}
+[data-dash-source-state=refreshing]{opacity:.5;transition:opacity var(--cds-dur-slow)}
+@media (max-width:640px){.rq .hide-sm{display:none}}
+</style>
+
+<div class="rq">
+  <header class="rq-head" id="top">
+    <div class="rq-head-text">
+      <h1>임베디드·HW 채용 요건 지도</h1>
+      <p class="rq-take" id="takeaway"><span class="dash-skeleton">—</span></p>
+    </div>
+    <div class="rq-seg" role="group" aria-label="직군 선택" id="track-seg">
+      <button type="button" data-track="전체">전체</button>
+      <button type="button" data-track="임베디드">임베디드 개발자</button>
+      <button type="button" data-track="하드웨어">하드웨어 엔지니어</button>
+    </div>
+  </header>
+
+  <section class="rq-kpis" id="kpis">
+    <div class="rq-kpi"><span>분석한 공고</span><strong class="k dash-skeleton" data-source="summary" data-field="jobs">—</strong><small>원티드, 2026-10-12 수집</small></div>
+    <div class="rq-kpi"><span>채용 기업</span><strong class="k dash-skeleton" data-source="summary" data-field="companies">—</strong><small>서로 다른 회사 수</small></div>
+    <div class="rq-kpi"><span>최소 경력 중앙값</span><strong class="k dash-skeleton" data-source="summary" data-field="median_min_years">—</strong><small>공고의 "N년 이상" 기준</small></div>
+    <div class="rq-kpi"><span>신입 지원 가능</span><strong class="k dash-skeleton" data-source="summary" data-field="newbie_share">—</strong><small>최소 경력 0년인 공고</small></div>
+    <div class="rq-kpi"><span>C/C++ 필수</span><strong class="k dash-skeleton" data-source="summary" data-field="cpp_share">—</strong><small>자격요건에 C/C++ 명시</small></div>
+    <div class="rq-kpi"><span>서울·경기 근무</span><strong class="k dash-skeleton" data-source="summary" data-field="capital_share">—</strong><small>근무지 기준</small></div>
+  </section>
+
+  <section class="rq-card" id="top-skills">
+    <h2>가장 많이 요구되는 기술 Top 20</h2>
+    <p class="rq-note">공고 본문에서 해당 기술이 언급된 공고 수. 자격요건에 있으면 '필수', 우대사항에만 있으면 '우대'로 셉니다.</p>
+    <div class="rq-legend"><span><i class="sw0"></i>자격요건(필수)</span><span><i class="sw1"></i>우대사항에만 있음</span></div>
+    <div class="rq-chart" id="top-chart" data-source="skills" style="min-height:34rem"></div>
+  </section>
+
+  <section class="rq-sec" id="by-group">
+    <h2>분야별 요건</h2>
+    <p class="rq-note" style="margin-top:-.4rem">분야마다 많이 언급된 기술 6개. 막대 길이는 공고 대비 비율이며 모든 카드가 같은 눈금을 씁니다.</p>
+    <div class="rq-grid" id="group-grid" data-source="skills"></div>
+  </section>
+
+  <section class="rq-sec" id="profile">
+    <h2>경력·학력·근무지</h2>
+    <div class="rq-grid">
+      <div class="rq-card" id="years-card">
+        <h3>요구 최소 경력</h3>
+        <p class="rq-note">공고가 제시한 최소 연차별 공고 수</p>
+        <div class="rq-chart" id="years-chart" data-source="years" style="min-height:13rem"></div>
+      </div>
+      <div class="rq-card" id="edu-card">
+        <h3>학력·전공 언급</h3>
+        <p class="rq-note">자격요건에 학위·전공이 적힌 공고 비율</p>
+        <div class="rq-bars" id="edu-bars" data-source="education"></div>
+      </div>
+      <div class="rq-card" id="soft-card">
+        <h3>공통 역량</h3>
+        <p class="rq-note">자격요건·우대사항에 언급된 공고 비율</p>
+        <div class="rq-bars" id="soft-bars" data-source="soft_skills"></div>
+      </div>
+      <div class="rq-card" id="loc-card">
+        <h3>근무지</h3>
+        <p class="rq-note">근무지 기준 공고 수</p>
+        <div class="rq-bars" id="loc-bars" data-source="locations"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rq-card" id="jobs">
+    <h2>공고별 요건</h2>
+    <div class="rq-tools">
+      <input id="job-search" type="search" placeholder="회사, 포지션, 기술로 검색 (예: STM32, FPGA)" aria-label="공고 검색">
+      <span class="rq-note" id="job-count"></span>
+    </div>
+    <div class="rq-tablebox">
+      <table id="job-table" data-source="jobs" data-row-key="id">
+        <thead><tr>
+          <th data-field="company"><button type="button" data-sort="company">기업</button></th>
+          <th data-field="position"><button type="button" data-sort="position">포지션</button></th>
+          <th data-field="track" class="hide-sm"><button type="button" data-sort="track">직군</button></th>
+          <th data-field="years_label"><button type="button" data-sort="years_min">경력</button></th>
+          <th data-field="location" class="hide-sm"><button type="button" data-sort="location">근무지</button></th>
+          <th data-field="must" class="hide-sm"><button type="button" data-sort="must">필수 기술 키워드</button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="rq-note">행을 누르면 아래에 그 공고의 자격요건·우대사항 원문이 열립니다.</p>
+    <div id="job-detail" class="rq-detail" hidden>
+      <div class="rq-card" style="background:var(--color-bg)">
+        <div class="rq-detail-head"><h3 id="d-title" data-source="jobs" data-field="position"></h3><a id="d-link" href="#" target="_blank" rel="noopener">원티드에서 보기 ↗</a></div>
+        <p class="rq-note" id="d-company" data-source="jobs" data-field="company"></p>
+        <h3>자격요건</h3>
+        <pre id="d-req" data-source="jobs" data-field="requirements"></pre>
+      </div>
+      <div class="rq-card" style="background:var(--color-bg)">
+        <h3>우대사항</h3>
+        <pre id="d-pref" data-source="jobs" data-field="preferred"></pre>
+        <h3>추출된 키워드</h3>
+        <p class="rq-note" id="d-kw"></p>
+      </div>
+    </div>
+  </section>
+
+  <p class="rq-note">키워드는 공고 원문의 단어를 사전에 정의한 기술 목록과 대조해 뽑았습니다. 표기가 특이하거나 이미지로만 올린 요건은 빠질 수 있습니다. 원티드 '개발 › 임베디드 개발자, 하드웨어 엔지니어' 필터, 경력 전체, 국가 전체 기준 242건입니다.</p>
+</div>
+
+<script>
+(() => {
+  const C0 = dash.colors[0], C1 = dash.colors[1];
+  document.querySelectorAll('.sw0').forEach(e => e.style.background = C0);
+  document.querySelectorAll('.sw1').forEach(e => e.style.background = C1);
+  const pct = d3.format('.0%'), num = d3.format(',');
+  const track = () => dash.params().track || '전체';
+  const enc = (s) => encodeURIComponent(s);
+  const seg = document.getElementById('track-seg');
+  seg.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-track]');
+    if (b) { dash.setParams({ track: b.dataset.track }); dash.setLink('top'); }
+  });
+
+  const fail = (el) => { el.replaceChildren(); const d = document.createElement('div'); d.className = 'rq-fail'; d.textContent = 'Failed to load'; el.appendChild(d); };
+  const skel = (el, on) => el.classList.toggle('dash-skeleton', on);
+
+  function tipIn(box) {
+    let t = box.querySelector('.rq-tip');
+    if (!t) { t = document.createElement('div'); t.className = 'rq-tip'; t.hidden = true; box.appendChild(t); }
+    return t;
+  }
+  function placeTip(box, tip, ev) {
+    const r = box.getBoundingClientRect();
+    let x = ev.clientX - r.left + 12, y = ev.clientY - r.top + 12;
+    tip.hidden = false;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    if (x + w > box.clientWidth) x = ev.clientX - r.left - w - 12;
+    if (y + h > box.clientHeight) y = ev.clientY - r.top - h - 8;
+    tip.style.left = Math.max(0, x) + 'px'; tip.style.top = Math.max(0, y) + 'px';
+  }
+  function tipRows(tip, title, rows) {
+    tip.replaceChildren();
+    const t = document.createElement('div'); t.className = 't'; t.textContent = title; tip.appendChild(t);
+    rows.forEach(([c, label, val]) => {
+      const d = document.createElement('div');
+      if (c) { const i = document.createElement('i'); i.style.background = c; d.appendChild(i); }
+      d.appendChild(document.createTextNode(label + ' ' + val)); tip.appendChild(d);
+    });
+  }
+
+  function drawTop(rows, n) {
+    const box = document.getElementById('top-chart');
+    box.replaceChildren();
+    const data = rows.slice().sort((a, b) => b.total - a.total || b.must - a.must).slice(0, 20);
+    const W = box.clientWidth || 600, rowH = 26, top = 4;
+    const H = top + data.length * rowH + 4;
+    box.style.minHeight = H + 'px';
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', '기술별 언급 공고 수');
+    const probe = svg.append('text').attr('class', 'lab');
+    let lw = 0; data.forEach(d => { probe.text(d.skill); lw = Math.max(lw, probe.node().getComputedTextLength()); }); probe.remove();
+    probe.remove();
+    const endW = 92, left = Math.min(lw + 10, W * 0.4);
+    const x = d3.scaleLinear([0, d3.max(data, d => d.total) || 1], [0, Math.max(40, W - left - endW)]);
+    const tip = tipIn(box);
+    const g = svg.selectAll('g.r').data(data).join('g').attr('class', 'r').attr('transform', (d, i) => `translate(0,${top + i * rowH})`);
+    g.append('text').attr('class', 'lab').attr('x', left - 10).attr('y', rowH / 2).attr('dy', '.35em').attr('text-anchor', 'end').text(d => d.skill);
+    g.append('rect').attr('x', left).attr('y', 6).attr('height', rowH - 12).attr('rx', 4).attr('width', d => Math.max(0, x(d.must))).style('fill', C0);
+    g.append('rect').attr('x', d => left + x(d.must) + (d.must ? 2 : 0)).attr('y', 6).attr('height', rowH - 12).attr('rx', 4).attr('width', d => Math.max(0, x(d.nice_only) - (d.must && d.nice_only ? 2 : 0))).style('fill', C1);
+    g.append('text').attr('x', d => left + x(d.total) + 8).attr('y', rowH / 2).attr('dy', '.35em').text(d => `${d.total}건 · ${pct(d.total_share)}`);
+    g.append('rect').attr('x', 0).attr('width', W).attr('height', rowH).style('fill', 'transparent')
+      .on('mousemove', (ev, d) => { tipRows(tip, `${d.skill} · ${d.group}`, [[C0, '필수', `${d.must}건 (${pct(d.must_share)})`], [C1, '우대만', `${d.nice_only}건`], [null, '공고 대비', pct(d.total_share)]]); placeTip(box, tip, ev); })
+      .on('mouseleave', () => { tip.hidden = true; });
+  }
+
+  const GROUPS = ['언어', 'OS·플랫폼', '프로세서·칩', '통신·인터페이스', 'HW 설계·검증', '개발 도구·방법론', 'AI·비전', '로보틱스·제어', '차량·안전 표준'];
+  function barRow(name, parts, max, label) {
+    const r = document.createElement('div'); r.className = 'rq-bar';
+    const n = document.createElement('span'); n.className = 'n'; n.textContent = name; n.title = name;
+    const tr = document.createElement('div'); tr.className = 'rq-track';
+    parts.forEach(([v, c]) => { if (v > 0) { const b = document.createElement('div'); b.style.width = (v / max * 100) + '%'; b.style.background = c; tr.appendChild(b); } });
+    const v = document.createElement('span'); v.className = 'v'; v.textContent = label;
+    r.append(n, tr, v); return r;
+  }
+  function drawGroups(rows, n) {
+    const grid = document.getElementById('group-grid');
+    grid.replaceChildren();
+    const max = d3.max(rows, d => d.total) || 1;
+    GROUPS.forEach(gname => {
+      const items = rows.filter(d => d.group === gname).sort((a, b) => b.total - a.total || b.must - a.must).slice(0, 6);
+      const card = document.createElement('div'); card.className = 'rq-card'; card.id = 'group-' + GROUPS.indexOf(gname);
+      const h = document.createElement('h3'); h.textContent = gname; card.appendChild(h);
+      const any = items.reduce((s, d) => s + d.total, 0);
+      const bars = document.createElement('div'); bars.className = 'rq-bars';
+      if (!items.length) { const p = document.createElement('p'); p.className = 'rq-note'; p.textContent = '이 직군에서는 언급이 없습니다.'; bars.appendChild(p); }
+      items.forEach(d => {
+        const row = barRow(d.skill, [[d.must, C0], [d.nice_only, C1]], max, pct(d.total_share));
+        row.title = `${d.skill}: 필수 ${d.must}건, 우대만 ${d.nice_only}건 (전체 ${n}건 중)`;
+        bars.appendChild(row);
+      });
+      card.appendChild(bars); grid.appendChild(card);
+    });
+  }
+
+  function drawYears(rows) {
+    const box = document.getElementById('years-chart');
+    box.replaceChildren();
+    const data = rows.slice().sort((a, b) => a.order - b.order);
+    const W = box.clientWidth || 320, H = 208, m = { t: 18, b: 36, l: 4, r: 4 };
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', '최소 경력별 공고 수');
+    const x = d3.scaleBand(data.map(d => d.bucket), [m.l, W - m.r]).padding(0.28);
+    const y = d3.scaleLinear([0, d3.max(data, d => d.jobs) || 1], [H - m.b, m.t]);
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - m.b).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-axis)');
+    const bw = Math.min(32, x.bandwidth());
+    const tip = tipIn(box);
+    const g = svg.selectAll('g.b').data(data).join('g').attr('class', 'b');
+    g.append('path').style('fill', (d, i) => C0).attr('d', d => {
+      const x0 = x(d.bucket) + (x.bandwidth() - bw) / 2, y0 = y(d.jobs), h = H - m.b - y0, r = Math.min(4, h / 2, bw / 2);
+      if (h <= 0) return '';
+      return `M${x0},${H - m.b}V${y0 + r}Q${x0},${y0} ${x0 + r},${y0}H${x0 + bw - r}Q${x0 + bw},${y0} ${x0 + bw},${y0 + r}V${H - m.b}Z`;
+    });
+    g.append('text').attr('class', 'lab').attr('x', d => x(d.bucket) + x.bandwidth() / 2).attr('y', d => y(d.jobs) - 5).attr('text-anchor', 'middle').text(d => d.jobs);
+    const short = W < 380;
+    g.append('text').attr('x', d => x(d.bucket) + x.bandwidth() / 2).attr('y', H - m.b + 16).attr('text-anchor', 'middle').text(d => short ? d.bucket.replace(' (신입 가능)', '').replace(' 이상', '+') : d.bucket.replace(' (신입 가능)', ''));
+    g.filter(d => d.order === 0).append('text').attr('x', d => x(d.bucket) + x.bandwidth() / 2).attr('y', H - m.b + 30).attr('text-anchor', 'middle').text('신입');
+    g.append('rect').attr('x', d => x(d.bucket)).attr('y', m.t).attr('width', x.bandwidth()).attr('height', H - m.t - m.b).style('fill', 'transparent')
+      .on('mousemove', (ev, d) => { const tot = d3.sum(data, e => e.jobs) || 1; tipRows(tip, '최소 경력 ' + d.bucket, [[null, '공고', `${d.jobs}건 (${pct(d.jobs / tot)})`]]); placeTip(box, tip, ev); })
+      .on('mouseleave', () => { tip.hidden = true; });
+  }
+
+  function drawList(id, rows, nameKey, valKey, fmt, maxVal) {
+    const box = document.getElementById(id);
+    box.replaceChildren();
+    const max = maxVal || d3.max(rows, d => d[valKey]) || 1;
+    rows.forEach(d => box.appendChild(barRow(d[nameKey], [[d[valKey], C0]], max, fmt(d))));
+  }
+
+  // jobs table
+  const tbody = document.querySelector('#job-table tbody');
+  const search = document.getElementById('job-search');
+  let sortKey = 'company', sortDir = 1, selected = null, jobRows = [];
+  document.querySelector('#job-table thead').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-sort]'); if (!b) return;
+    const k = b.dataset.sort; if (k === sortKey) sortDir = -sortDir; else { sortKey = k; sortDir = 1; }
+    renderTable();
+  });
+  search.addEventListener('input', () => renderTable());
+  tbody.addEventListener('click', (e) => { const tr = e.target.closest('tr[data-key]'); if (tr) pick(tr.dataset.key); });
+  tbody.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const tr = e.target.closest('tr[data-key]'); if (tr) pick(tr.dataset.key); } });
+  function pick(id) { selected = id; renderTable(); renderDetail(); }
+  function renderTable() {
+    const q = search.value.trim().toLowerCase();
+    const tr0 = track();
+    let rows = jobRows.filter(r => tr0 === '전체' || r.track === tr0);
+    if (q) rows = rows.filter(r => [r.company, r.position, r.must, r.nice, r.requirements, r.preferred].join(' ').toLowerCase().includes(q));
+    rows.sort((a, b) => { const av = a[sortKey], bv = b[sortKey]; return (typeof av === 'number' ? av - bv : String(av).localeCompare(String(bv), 'ko')) * sortDir; });
+    document.querySelectorAll('#job-table th').forEach(th => { const b = th.querySelector('button'); th.setAttribute('aria-sort', b.dataset.sort === sortKey ? (sortDir > 0 ? 'ascending' : 'descending') : 'none'); });
+    document.getElementById('job-count').textContent = `${num(rows.length)}건 표시`;
+    tbody.replaceChildren(...rows.map(r => {
+      const tr = document.createElement('tr'); tr.dataset.key = r.id; tr.tabIndex = 0;
+      if (r.id === selected) tr.setAttribute('aria-selected', 'true');
+      const td = (txt, cls) => { const c = document.createElement('td'); if (cls) c.className = cls; c.textContent = txt; return c; };
+      const tk = document.createElement('td'); tk.className = 'hide-sm'; const chip = document.createElement('span'); chip.className = 'rq-chip'; chip.textContent = r.track; tk.appendChild(chip);
+      tr.append(td(r.company), td(r.position, 'pos'), tk, td(r.years_label, 'yr'), td(r.location, 'hide-sm'), td(r.must || '—', 'kw hide-sm'));
+      return tr;
+    }));
+  }
+  function renderDetail() {
+    const box = document.getElementById('job-detail');
+    const r = jobRows.find(j => j.id === selected);
+    if (!r) { box.hidden = true; return; }
+    box.hidden = false;
+    const w = 'id=' + enc(r.id);
+    ['d-title', 'd-company', 'd-req', 'd-pref'].forEach(i => document.getElementById(i).setAttribute('data-where', w));
+    document.getElementById('d-title').textContent = r.position;
+    document.getElementById('d-company').textContent = r.company;
+    document.getElementById('d-req').textContent = r.requirements || '—';
+    document.getElementById('d-pref').textContent = r.preferred || '—';
+    document.getElementById('d-kw').textContent = `필수: ${r.must || '없음'}  /  우대: ${r.nice || '없음'}`;
+    document.getElementById('d-link').href = r.url;
+  }
+
+  dash.onData(() => {
+    const t = track();
+    seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.track === t)));
+    const w = 'track=' + enc(t);
+
+    const S = dash.data('summary');
+    const s = S.status === 'ok' ? S.data.find(r => r.track === t) : null;
+    document.querySelectorAll('#kpis .k').forEach(el => {
+      el.setAttribute('data-where', w);
+      skel(el, S.status === 'loading');
+      if (!s) { el.textContent = '—'; return; }
+      const f = el.dataset.field, v = Number(s[f]);
+      el.textContent = f.endsWith('share') ? pct(v) : f === 'median_min_years' ? v + '년' : num(v);
+    });
+
+    const K = dash.data('skills');
+    const rows = K.status === 'ok' ? K.data.filter(r => r.track === t).map(r => ({ ...r, must: +r.must, nice_only: +r.nice_only, total: +r.total, must_share: +r.must_share, total_share: +r.total_share })) : [];
+    const topChart = document.getElementById('top-chart'), grid = document.getElementById('group-grid');
+    const n = s ? +s.jobs : 0;
+    if (K.status === 'ok') { skel(topChart, false); skel(grid, false); drawTop(rows, n); drawGroups(rows, n); }
+    else if (K.status === 'error') { skel(topChart, false); fail(topChart); fail(grid); }
+    else { topChart.replaceChildren(); grid.replaceChildren(); skel(topChart, true); }
+
+    const take = document.getElementById('takeaway');
+    if (s && rows.length) {
+      const top3 = rows.slice().sort((a, b) => b.must - a.must).slice(0, 3);
+      take.replaceChildren();
+      const label = t === '전체' ? '임베디드·하드웨어' : t === '임베디드' ? '임베디드 개발자' : '하드웨어 엔지니어';
+      const add = (txt, attrs) => { if (!attrs) { take.appendChild(document.createTextNode(txt)); return; } const b = document.createElement('b'); b.textContent = txt; Object.entries(attrs).forEach(([k, v]) => b.setAttribute(k, v)); take.appendChild(b); };
+      add(`${label} 공고 `); add(num(n), { 'data-source': 'summary', 'data-field': 'jobs', 'data-where': w }); add('건에서 가장 자주 필수로 요구하는 기술은 ');
+      top3.forEach((d, i) => {
+        add(d.skill); add(`(${pct(d.must_share)})`, { 'data-source': 'skills', 'data-field': 'must_share', 'data-where': `track=${enc(t)}&group=${enc(d.group)}&skill=${enc(d.skill)}` });
+        add(i < top3.length - 1 ? ', ' : '입니다. ');
+      });
+      add('최소 경력은 보통 '); add(s.median_min_years + '년', { 'data-source': 'summary', 'data-field': 'median_min_years', 'data-where': w }); add(' 이상이고, 신입 지원이 가능한 공고는 '); add(pct(s.newbie_share), { 'data-source': 'summary', 'data-field': 'newbie_share', 'data-where': w }); add('입니다.');
+    } else if (S.status === 'error' || K.status === 'error') { take.textContent = '데이터를 불러오지 못했습니다.'; }
+
+    const Y = dash.data('years'), yb = document.getElementById('years-chart');
+    if (Y.status === 'ok') { skel(yb, false); drawYears(Y.data.filter(r => r.track === t).map(r => ({ ...r, jobs: +r.jobs, order: +r.order }))); }
+    else if (Y.status === 'error') { skel(yb, false); fail(yb); } else { yb.replaceChildren(); skel(yb, true); }
+
+    [['education', 'edu-bars', 'item', 'share', d => pct(d.share), 0],
+     ['soft_skills', 'soft-bars', 'item', 'share', d => pct(d.share), 0],
+     ['locations', 'loc-bars', 'location', 'jobs', d => num(d.jobs) + '건', 0]].forEach(([id, el, nk, vk, fmt, fixed]) => {
+      const D = dash.data(id), box = document.getElementById(el);
+      if (D.status === 'ok') { skel(box, false); drawList(el, D.data.filter(r => r.track === t).map(r => ({ ...r, share: +r.share, jobs: +r.jobs })), nk, vk, fmt, fixed ? 1 : 0); }
+      else if (D.status === 'error') { skel(box, false); fail(box); } else { box.replaceChildren(); skel(box, true); }
+    });
+
+    const J = dash.data('jobs');
+    jobRows = J.status === 'ok' ? J.data.map(r => ({ ...r, id: String(r.id), years_min: +r.years_min })) : [];
+    if (J.status === 'error') { tbody.replaceChildren(); document.getElementById('job-count').textContent = 'Failed to load'; }
+    else { renderTable(); renderDetail(); }
+  });
+
+  const named = document.getElementById(location.hash.slice(1));
+  if (named) setTimeout(() => named.scrollIntoView(), 300);
+})();
+</script>
