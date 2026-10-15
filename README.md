@@ -72,6 +72,19 @@ Windows 콘솔에서 한글이 깨지면 `PYTHONIOENCODING=utf-8`을 설정하�
 
 `out/index.html`은 Claude 대시보드 런타임(`window.dash`)에서 실행되도록 만든 페이지입니다. 브라우저에서 파일을 바로 열면 데이터가 표시되지 않으니 위의 대시보드 링크로 보세요.
 
+## 사용한 외부 도구·서비스
+
+| 도구 / 서비스 | 용도 | 연결 방식 |
+|---|---|---|
+| **원티드 공개 API** | 공고 목록과 상세 수집 | HTTP (`urllib`) · 인증 없음<br>목록: `GET /api/chaos/navigation/v1/results`<br>상세: `GET /api/v4/jobs/{id}` |
+| **Claude Code** | 수집·분석 스크립트 작성과 실행, 결과 정리 | 로컬 CLI (Windows 11) |
+| **Claude Artifacts (Dashboard)** | 대시보드 호스팅. 집계 JSON은 아티팩트 데이터 저장소에, 페이지는 `files/index.html`에 올림 | Claude Artifact / ArtifactData 도구 |
+| **Claude Docs** | 학습 로드맵 보고서를 작성하고 차트 위젯 3개(스킬 비교, 경력 분포, 로드맵 다이어그램)를 삽입 | Claude Docs 커넥터 (MCP) |
+| **GitHub / GitHub CLI** | 저장소 생성과 업로드 | `gh` CLI (HTTPS, OAuth) |
+| **Python 3** | 데이터 처리 | 표준 라이브러리만 사용 (`json`, `re`, `urllib`, `concurrent.futures`) |
+
+> API 키나 토큰은 저장소에 넣지 않았습니다. 원티드 API는 인증 없이 호출할 수 있습니다.
+
 ## 참고
 
 - 원본 공고 데이터(`data/`)는 원티드 콘텐츠이므로 저장소에 넣지 않았습니다. 스크립트를 실행하면 다시 받을 수 있습니다.
